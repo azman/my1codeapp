@@ -303,6 +303,11 @@ int main(int argc, char *argv[])
 						putchar('\n');
 					}
 				}
+				/* free it up! */
+				free((void*)pmatrix->pdata);
+				pmatrix->xsize = -1;
+				pmatrix->ysize = -1;
+				pmatrix->pdata = 0x0;
 			}
 	}
 
