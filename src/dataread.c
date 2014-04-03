@@ -304,10 +304,10 @@ int main(int argc, char *argv[])
 					}
 				}
 				/* free it up! */
-				free((void*)pmatrix->pdata);
-				pmatrix->xsize = -1;
-				pmatrix->ysize = -1;
-				pmatrix->pdata = 0x0;
+				free((void*)mymatrix.pdata);
+				mymatrix.xsize = -1;
+				mymatrix.ysize = -1;
+				mymatrix.pdata = 0x0;
 			}
 	}
 
