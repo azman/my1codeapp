@@ -1,6 +1,7 @@
 # makefile for my1codeapp
 
 CC = gcc
+CPP = g++
 
 DELETE = rm -rf
 
@@ -15,6 +16,12 @@ OFLAGS +=
 
 %: src/%.c
 	$(CC) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
+
+%: src/%.cpp src/%.hpp
+	$(CPP) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
+
+%: src/%.cpp
+	$(CPP) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
 
 # nothing to 'delete' actually
 clean:
