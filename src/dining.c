@@ -3,6 +3,12 @@
  * A sample program to show the dining philosophers' problem (OS concept).
  *
  * A few things to note:
+ * - this code does not implement any particular algorithm
+ *   = the first diner to grab both forks gets to eat
+ *   = if he gets only one, release it and try again
+ * - uses process instead of thread
+ *   = the 'shared' resources (i.e. forks) are represented by files
+ *   = mutual exclusion handled by file exclusive access
  * - still need to figure WHAT to measure as performance indicator
  *   = an example on how to measure lapsed time (check out starving function)
  *   = a reward/penalty feature for think_time is introduced
