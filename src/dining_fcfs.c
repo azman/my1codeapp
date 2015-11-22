@@ -113,7 +113,7 @@ void do_dining(int dining_time, int chew_time)
 int main(int argc, char *argv[])
 {
 	pid_t diner[DINER_COUNT],tools[DINER_COUNT];
-	int queue[DINER_COUNT],going[DINER_COUNT];
+	int queue[DINER_COUNT],xflag[DINER_COUNT];
 	int dining_time = DINER_DTIME_TOTAL, chew_time = DINER_CHEW_TIME;
 	int loop, test, time_unit = 0;
 	int rtool[DINER_COUNT],ltool[DINER_COUNT];
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
 	for(which=0;which<DINER_COUNT;which++)
 	{
 		tools[which] = 0;
-		going[which] = 0;
+		xflag[which] = 0;
 		queue[which] = -1;
 	}
 
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
 		printf("[MAIN] TIME UNIT %d (",time_unit);
 		for(which=0;which<DINER_COUNT;which++)
 		{
-			printf("{%d}",going[which]);
+			printf("{%d}",xflag[which]);
 			if(diner[which]) count++;
 		}
 		printf(":");
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
 					printf("[MAIN] Diner %d given utensils (Q)...\n",which);
 					tools[ltool[which]] = diner[which];
 					tools[rtool[which]] = diner[which];
-					going[which] = 1;
+					xflag[which] = 1;
 					/* start it */
 					kill(diner[which],SIGUSR1);
 					while(start==0); start = 0;
@@ -240,12 +240,12 @@ int main(int argc, char *argv[])
 				printf("[MAIN] Diner %d given utensils...\n",which);
 				tools[ltool[which]] = diner[which];
 				tools[rtool[which]] = diner[which];
-				going[which] = 1;
+				xflag[which] = 1;
 				/* start it */
 				kill(diner[which],SIGUSR1);
 				while(start==0); start = 0;
 			}
-			else if(!going[which])
+			else if(!xflag[which])
 			{
 				/* queue it! */
 				for(loop=0;loop<DINER_COUNT;loop++)
@@ -277,16 +277,10 @@ int main(int argc, char *argv[])
 				start = 0;
 				printf("[MAIN] Diner %d released tool...\n",which);
 				/* child done with tools? */
-				if(tools[ltool[which]]!=diner[which]||
-					tools[rtool[which]]!=diner[which])
-				{
-					printf("[MAIN] ERROR TOOL! (%d,%d,%d)\n",
-						which,ltool[which],rtool[which]);
-				}
 				tools[ltool[which]] = 0;
 				tools[rtool[which]] = 0;
-				going[which] = 0;
-				/* acknowledge it and wait for it to check if done */
+				xflag[which] = 0;
+				/* acknowledge it */
 				kill(diner[which],SIGUSR1);
 				/* check if done! */
 				kill(diner[which],SIGUSR2);

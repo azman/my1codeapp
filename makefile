@@ -1,5 +1,9 @@
 # makefile for my1codeapp
 
+ALLAPP = $(subst .c,,$(subst src/,,$(wildcard src/*.c)))
+TARGET ?=
+TGTLBL = app
+
 CC = gcc
 CPP = g++
 
@@ -9,20 +13,25 @@ CFLAGS += -Wall
 LFLAGS += $(LDFLAGS)
 OFLAGS +=
 
-# CFLAGS += -DMY1_DEBUG
+.PHONY: dummy
 
-%: src/%.c src/%.h
-	$(CC) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
+debug: CFLAGS += -DMY1_DEBUG
+
+$(TARGET): src/$(TARGET).c
+	$(CC) $(CFLAGS) -o $(TGTLBL) $< $(LFLAGS) $(OFLAGS)
+
+dummy:
+	@echo "Run 'make <app>' or 'make TARGET=<app>'"
+	@echo "  <app> = { $(ALLAPP) }"
+
+debug: $(TARGET)
 
 %: src/%.c
 	$(CC) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
-
-%: src/%.cpp src/%.hpp
-	$(CPP) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
 
 %: src/%.cpp
 	$(CPP) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
 
 # nothing to 'delete' actually
 clean:
-	-$(DELETE) *.o
+	-$(DELETE) $(ALLAPP) $(TGTLBL)
