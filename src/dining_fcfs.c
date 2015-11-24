@@ -93,7 +93,7 @@ int burping(int remaining)
 
 void do_dining(int dining_time, int chew_time)
 {
-	int total_starve = 0, total_think = 0, think_time = dining_time;
+	int total_starve = 0;
 	printf("[GENIUS%d] Starting dinner...\n",which);
 	/** dining philosopher here!!!! */
 	do
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
 	/* manage dinner! */
 	while(1)
 	{
-		int status, count = 0;
+		int count = 0;
 		printf("[MAIN] TIME UNIT %d (",time_unit);
 		for(which=0;which<DINER_COUNT;which++)
 		{
