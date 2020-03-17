@@ -11,3 +11,8 @@ repository for my future reference. I have wasted a lot of time rewriting codes
 like this in the past - well, when I started doing programming, I do not even
 have my own PC. Basically, I just want to avoid having to rewrite codes that
 are similar in nature.
+
+Codes from my1codelib and my1termu can also be used. For example, to compile
+uartsend.c (which equires my1termu),
+
+    make TARGET=uartsend OBJLST="my1cons.o my1comlib.o my1bytes.o"

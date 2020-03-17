@@ -22,11 +22,13 @@ LFLAGS += $(DOLINK)
 
 # i can still squeeze in some external code(s) => OBJLST!
 EXTPATH = ../my1codelib/src
-CFLAGS += -I$(EXTPATH)
+EX2PATH = ../my1termu/src
+CFLAGS += -I$(EXTPATH) -I$(EX2PATH)
 
 .PHONY: dummy $(TARGET)
 
-$(TARGET): src/$(TARGET).c $(OBJLST)
+# TARGET can be temporary code (reside at top level)
+$(TARGET): $(OBJLST) $(TARGET).o
 	$(CC) $(CFLAGS) -o $(TGTLBL) $^ $(LFLAGS) $(OFLAGS)
 
 dummy:
@@ -34,6 +36,10 @@ dummy:
 	@echo "  <app> = { $(ALLAPP) }"
 	@echo
 	@echo "To link a library (e.g. math), do 'make <app> DOLINK=-lm'"
+
+# make TARGET=uartsend OBJLST="my1cons.o my1comlib.o my1bytes.o"
+uart-send: my1cons.o my1comlib.o my1bytes.o uartsend.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS) $(OFLAGS)
 
 %: src/%.c src/%.h
 	$(CC) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
@@ -49,5 +55,15 @@ dummy:
 %.o: $(EXTPATH)/%.c $(EXTPATH)/%.h
 	$(CC) -c $(CFLAGS) -o $@ $<
 
+%.o: $(EX2PATH)/%.c $(EX2PATH)/%.h
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+# for fancy TARGETs
+%.o: src/%.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+
 clean:
-	-$(DELETE) $(ALLAPP) $(TGTLBL) *.o
+	-$(DELETE) $(ALLAPP) $(TGTLBL) uart-send *.o
