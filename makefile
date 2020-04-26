@@ -1,6 +1,7 @@
 # makefile for single file app (my1codeapp)
 
 ALLAPP = $(subst .c,,$(subst src/,,$(wildcard src/*.c)))
+ALLAPP += $(subst .cpp,,$(subst src/,,$(wildcard src/*.cpp)))
 ALLAPP += $(subst .c,,$(wildcard *.c))
 
 TARGET ?=
@@ -10,6 +11,7 @@ DOLINK ?=
 DOFLAG ?=
 
 CC = gcc
+CP = g++
 
 DELETE = rm -rf
 
@@ -41,15 +43,20 @@ dummy:
 uart-send: my1cons.o my1comlib.o my1bytes.o uartsend.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS) $(OFLAGS)
 
-%: src/%.c src/%.h
-	$(CC) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
-
 %: src/%.c
 	$(CC) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
+
+# added c++ support...
+%: src/%.cpp
+	$(CP) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
 
 # for temporary quick testing of c source code
 %: %.c
 	$(CC) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
+
+# ...or c++!
+%: src/%.cpp
+	$(CP) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
 
 # to compile those external code(s) => OBJLST!
 %.o: $(EXTPATH)/%.c $(EXTPATH)/%.h
