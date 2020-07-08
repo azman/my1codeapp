@@ -40,6 +40,7 @@ dummy:
 	@echo "To link a library (e.g. math), do 'make <app> DOLINK=-lm'"
 
 # make TARGET=uartsend OBJLST="my1cons.o my1comlib.o my1bytes.o"
+uart-send: CFLAGS += -DPROGNAME=\"uart-send\"
 uart-send: my1cons.o my1comlib.o my1bytes.o uartsend.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS) $(OFLAGS)
 

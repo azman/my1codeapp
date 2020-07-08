@@ -6,6 +6,10 @@
 #include <stdio.h>
 #include <string.h>
 /*----------------------------------------------------------------------------*/
+#ifndef PROGNAME
+#define PROGNAME "uartsend"
+#endif
+/*----------------------------------------------------------------------------*/
 #define ERROR_GENERAL -1
 #define ERROR_PARAM_PORT -2
 #define ERROR_PARAM_BAUD -3
@@ -14,7 +18,7 @@
 /*----------------------------------------------------------------------------*/
 void about(void)
 {
-	printf("Use: uartsend [options]\n");
+	printf("\nUse: %s [options]\n",PROGNAME);
 	printf("Options are:\n");
 	printf("  --port <number> : port number between 1-%d.\n",MAX_COM_PORT);
 	printf("  --baud <number> : baudrate e.g. 9600(default),38400,115200.\n");
@@ -128,7 +132,7 @@ int main(int argc, char* argv[])
 	/* check if we have data to send */
 	if (!data.fill)
 	{
-		printf("No data to send?\n");
+		about();
 		return 0;
 	}
 	/* initialize port */
@@ -194,9 +198,10 @@ int main(int argc, char* argv[])
 		printf("[%02X]",data.data[loop]);
 		put_byte_serial(&s_port,data.data[loop]);
 	}
-	printf("\nRX:");
+	bytes_free(&data);
 
-	/* start main loop */
+	/* start main loop - wait for reply */
+	printf("\nRX:");
 	while(1)
 	{
 		key = get_keyhit_extended(&esc);
@@ -218,7 +223,6 @@ int main(int argc, char* argv[])
 	/* close port */
 	close_serial(&s_port);
 	/* done */
-	printf("\nRX:");
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
