@@ -24,8 +24,7 @@ LFLAGS += $(DOLINK)
 
 # i can still squeeze in some external code(s) => OBJLST!
 EXTPATH = ../my1codelib/src
-EX2PATH = ../my1termu/src
-CFLAGS += -I$(EXTPATH) -I$(EX2PATH)
+CFLAGS += -I$(EXTPATH)
 
 .PHONY: dummy $(TARGET)
 
@@ -39,9 +38,9 @@ dummy:
 	@echo
 	@echo "To link a library (e.g. math), do 'make <app> DOLINK=-lm'"
 
-# make TARGET=uartsend OBJLST="my1cons.o my1comlib.o my1bytes.o"
+# make TARGET=uartsend OBJLST="my1keys.o my1uart.o my1bytes.o"
 uart-send: CFLAGS += -DPROGNAME=\"uart-send\"
-uart-send: my1cons.o my1comlib.o my1bytes.o uartsend.o
+uart-send: my1keys.o my1uart.o my1bytes.o uartsend.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS) $(OFLAGS)
 
 %: src/%.c
@@ -56,14 +55,11 @@ uart-send: my1cons.o my1comlib.o my1bytes.o uartsend.o
 	$(CC) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
 
 # ...or c++!
-%: src/%.cpp
+%: %.cpp
 	$(CP) $(CFLAGS) -o $@ $< $(LFLAGS) $(OFLAGS)
 
 # to compile those external code(s) => OBJLST!
 %.o: $(EXTPATH)/%.c $(EXTPATH)/%.h
-	$(CC) -c $(CFLAGS) -o $@ $<
-
-%.o: $(EX2PATH)/%.c $(EX2PATH)/%.h
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 # for fancy TARGETs

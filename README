@@ -12,7 +12,10 @@ like this in the past - well, when I started doing programming, I do not even
 have my own PC. Basically, I just want to avoid having to rewrite codes that
 are similar in nature.
 
-Codes from my1codelib and my1termu can also be used. For example, to compile
-uartsend.c (which equires my1termu),
+Codes from my1codelib can be used. For example, to compile uartsend.c (which
+equires my1uart, my1keys and my1bytes),
 
-    make TARGET=uartsend OBJLST="my1cons.o my1comlib.o my1bytes.o"
+    make TARGET=uartsend OBJLST="my1keys.o my1uart.o my1bytes.o"
+
+Code uartsend.c is now part of my1uarttool library. This copy will be kept
+here as an example how to build against my1codelib stuffs.
